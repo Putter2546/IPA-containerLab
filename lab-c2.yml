@@ -1,0 +1,38 @@
+name: second
+mgmt:
+  network: management
+  ipv4-subnet: 172.80.60.0/24
+topology:
+  kinds:
+    nokia_srlinux:
+      image: ghcr.io/nokia/srlinux:24.7.2
+      type: ixrd2l
+    linux:
+      image: alpine:latest
+  nodes:
+    spine1:
+      kind: nokia_srlinux
+      type: ixrd3l
+      group: spine
+      mgmt-ipv4: 172.80.60.41
+    leaf1:
+      kind: nokia_srlinux
+      group: leaf
+      mgmt-ipv4: 172.80.60.31
+    leaf2:
+      kind: nokia_srlinux
+      group: leaf
+      mgmt-ipv4: 172.80.60.32
+    client1:
+      kind: linux
+      mgmt-ipv4: 172.80.60.21
+      group: server
+    client2:
+      kind: linux
+      group: server
+      mgmt-ipv4: 172.80.60.22
+  links:
+    - endpoints: ["spine1:e1-1", "leaf1:e1-49"]
+    - endpoints: ["spine1:e1-2", "leaf2:e1-49"]
+    - endpoints: ["leaf1:e1-1", "client1:eth1"]
+    - endpoints: ["leaf2:e1-1", "client2:eth1"]
