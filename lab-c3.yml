@@ -1,0 +1,57 @@
+name: third
+mgmt:
+  network: management
+  ipv4-subnet: 172.80.60.0/24
+topology:
+  defaults:
+    kind: nokia_srlinux
+  kinds:
+    nokia_srlinux:
+      image: ghcr.io/nokia/srlinux:24.7.2
+      type: ixrd2l
+    linux:
+      image: alpine:latest
+  nodes:
+    spine1:
+      type: ixrd3l
+      group: spine
+      mgmt-ipv4: 172.80.60.41
+    spine2:
+      type: ixrd3l
+      group: spine
+      mgmt-ipv4: 172.80.60.42
+    leaf1:
+      kind: nokia_srlinux
+      group: leaf
+      mgmt-ipv4: 172.80.60.31
+    leaf2:
+      kind: nokia_srlinux
+      group: leaf
+      mgmt-ipv4: 172.80.60.32
+    leaf3:
+      kind: nokia_srlinux
+      group: leaf
+      mgmt-ipv4: 172.80.60.33
+    server1:
+      kind: linux
+      mgmt-ipv4: 172.80.60.21
+      group: server
+    server2:
+      kind: linux
+      group: server
+      mgmt-ipv4: 172.80.60.22
+    server3:
+      kind: linux
+      mgmt-ipv4: 172.80.60.23
+      group: server
+  links:
+    - endpoints: ["spine1:e1-1", "leaf1:e1-49"]
+    - endpoints: ["spine1:e1-2", "leaf2:e1-49"]
+    - endpoints: ["spine1:e1-3", "leaf3:e1-49"]
+    - endpoints: ["spine2:e1-1", "leaf1:e1-48"]
+    - endpoints: ["spine2:e1-2", "leaf2:e1-48"]
+    - endpoints: ["spine2:e1-3", "leaf3:e1-48"]
+    - endpoints: ["leaf1:e1-1", "server1:eth1"]
+    - endpoints: ["leaf2:e1-1", "server2:eth1"]
+    - endpoints: ["leaf3:e1-1", "server3:eth1"]
+
